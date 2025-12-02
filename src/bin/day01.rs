@@ -1,40 +1,26 @@
 use aoc2025_rs::parse_input;
 
-#[derive(PartialEq, Debug, Clone)]
-enum Dir {
-    Left(i16),
-    Right(i16),
-}
+#[derive(PartialEq, Debug)]
+struct Turn(i32);
 
-impl Dir {
-    fn to_i16(&self) -> i16 {
-        match self {
-            Self::Left(n) => -1 * *n,
-            Self::Right(n) => *n,
-        }
-    }
-
-    fn numeric_dir(&self) -> i16 {
-        self.to_i16() / self.to_i16().abs()
-    }
-
+impl Turn {
     fn from_line(line: &str) -> Self {
         let (dir, num) = line.split_at(1);
-        let num = num.parse().expect("Failed to parse u8 in line");
+        let num: i32 = num.parse().expect("Failed to parse int in line");
         match dir {
-            "L" => Self::Left(num),
-            "R" => Self::Right(num),
-            _ => panic!("Failed to parse direction. Must be L or R. Got {dir}"),
+            "L" => Self(-num),
+            "R" => Self(num),
+            _ => panic!("Failed to parse direction"),
         }
     }
 }
 
-fn part1(dirs: &[Dir]) -> i16 {
+fn part1(turns: &[Turn]) -> i32 {
     let mut dial = 50;
     let mut zeroes = 0;
 
-    for dir in dirs.iter() {
-        dial = (dial + dir.to_i16()).rem_euclid(100);
+    for turn in turns.iter() {
+        dial = (dial + turn.0).rem_euclid(100);
         if dial == 0 {
             zeroes += 1;
         }
@@ -43,15 +29,13 @@ fn part1(dirs: &[Dir]) -> i16 {
     zeroes
 }
 
-fn part2(dirs: &[Dir]) -> i16 {
+fn part2(turns: &[Turn]) -> i32 {
     let mut dial = 50;
     let mut zeroes = 0;
 
-    for dir in dirs.iter() {
-        let mag = dir.to_i16().abs();
-
-        for _ in 0..mag {
-            dial = (dial + dir.numeric_dir()).rem_euclid(100);
+    for turn in turns.iter() {
+        for _ in 0..turn.0.abs() {
+            dial = (dial + turn.0.signum()).rem_euclid(100);
             if dial == 0 {
                 zeroes += 1;
             }
@@ -62,63 +46,61 @@ fn part2(dirs: &[Dir]) -> i16 {
 }
 
 fn main() {
-    let dirs: Vec<Dir> = parse_input(1)
+    let turns: Vec<Turn> = parse_input(1)
         .iter()
-        .map(|line| Dir::from_line(line))
+        .map(|line| Turn::from_line(line))
         .collect();
 
-    println!("Part 1: {}", part1(&dirs));
-    println!("Part 2: {}", part2(&dirs));
+    println!("Part 1: {}", part1(&turns));
+    println!("Part 2: {}", part2(&turns));
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
-    const FIXTURE: [Dir; 10] = [
-        Dir::Left(68),
-        Dir::Left(30),
-        Dir::Right(48),
-        Dir::Left(5),
-        Dir::Right(60),
-        Dir::Left(55),
-        Dir::Left(1),
-        Dir::Left(99),
-        Dir::Right(14),
-        Dir::Left(82),
+    const FIXTURE: [Turn; 10] = [
+        Turn(-68),
+        Turn(-30),
+        Turn(48),
+        Turn(-5),
+        Turn(60),
+        Turn(-55),
+        Turn(-1),
+        Turn(-99),
+        Turn(14),
+        Turn(-82),
     ];
 
     #[test]
     fn calculates_part1() {
-        let fixture: Vec<Dir> = FIXTURE.to_vec();
-        assert_eq!(part1(&fixture), 3);
+        assert_eq!(part1(&FIXTURE), 3);
     }
 
     #[test]
     fn calculates_part2() {
-        let fixture: Vec<Dir> = FIXTURE.to_vec();
-        assert_eq!(part2(&fixture), 6);
+        assert_eq!(part2(&FIXTURE), 6);
     }
 
     #[test]
     fn parses_left() {
-        assert_eq!(Dir::from_line(&"L50".to_string()), Dir::Left(50))
+        assert_eq!(Turn::from_line("L50"), Turn(-50))
     }
 
     #[test]
     fn parses_right() {
-        assert_eq!(Dir::from_line(&"R20".to_string()), Dir::Right(20))
+        assert_eq!(Turn::from_line("R20"), Turn(20))
     }
 
     #[test]
     #[should_panic]
     fn invalid_dir_panic() {
-        Dir::from_line(&"W20".to_string());
+        Turn::from_line("W20");
     }
 
     #[test]
     #[should_panic]
     fn invalid_num_panic() {
-        Dir::from_line(&"RHI".to_string());
+        Turn::from_line("RHI");
     }
 }
