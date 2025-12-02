@@ -29,7 +29,7 @@ impl Dir {
     }
 }
 
-fn day1(dirs: &[Dir]) -> i16 {
+fn part1(dirs: &[Dir]) -> i16 {
     let mut dial = 50;
     let mut zeroes = 0;
 
@@ -43,7 +43,7 @@ fn day1(dirs: &[Dir]) -> i16 {
     zeroes
 }
 
-fn day2(dirs: &[Dir]) -> i16 {
+fn part2(dirs: &[Dir]) -> i16 {
     let mut dial = 50;
     let mut zeroes = 0;
 
@@ -67,8 +67,8 @@ fn main() {
         .map(|line| Dir::from_line(line))
         .collect();
 
-    println!("Part 1: {}", day1(&dirs));
-    println!("Part 2: {}", day2(&dirs));
+    println!("Part 1: {}", part1(&dirs));
+    println!("Part 2: {}", part2(&dirs));
 }
 
 #[cfg(test)]
@@ -89,15 +89,15 @@ mod tests {
     ];
 
     #[test]
-    fn calculates_day1() {
+    fn calculates_part1() {
         let fixture: Vec<Dir> = FIXTURE.to_vec();
-        assert_eq!(day1(&fixture), 3);
+        assert_eq!(part1(&fixture), 3);
     }
 
     #[test]
-    fn calculates_day2() {
+    fn calculates_part2() {
         let fixture: Vec<Dir> = FIXTURE.to_vec();
-        assert_eq!(day2(&fixture), 6);
+        assert_eq!(part2(&fixture), 6);
     }
 
     #[test]
