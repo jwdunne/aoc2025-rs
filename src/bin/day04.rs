@@ -1,4 +1,4 @@
-use aoc2025_rs::parse_input;
+use aoc2025_rs::read_lines;
 
 const MAX_NEIGHBOURS: usize = 3;
 
@@ -85,7 +85,7 @@ fn lines_to_grid<S: AsRef<str>>(lines: &[S]) -> Vec<Vec<char>> {
 }
 
 fn main() {
-    let input = lines_to_grid(&parse_input(4));
+    let input = lines_to_grid(&read_lines(4));
     println!("Part 1: {}", part1(&input));
     println!("Part 2: {}", part2(&input));
 }

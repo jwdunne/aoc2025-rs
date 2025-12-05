@@ -1,4 +1,4 @@
-use aoc2025_rs::parse_input;
+use aoc2025_rs::read_lines;
 
 fn max_n_digit_sum(line: &str, n: usize) -> u64 {
     let mut stack = Vec::with_capacity(line.len());
@@ -28,7 +28,7 @@ fn part2(lines: &[String]) -> u64 {
 }
 
 fn main() {
-    let lines = parse_input(3);
+    let lines = read_lines(3);
     println!("Part 1: {}", part1(&lines));
     println!("Part 2: {}", part2(&lines));
 }

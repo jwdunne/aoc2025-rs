@@ -1,4 +1,4 @@
-use aoc2025_rs::parse_input;
+use aoc2025_rs::read_lines;
 
 #[derive(PartialEq, Debug)]
 struct Turn(i32);
@@ -46,7 +46,7 @@ fn part2(turns: &[Turn]) -> i32 {
 }
 
 fn main() {
-    let turns: Vec<Turn> = parse_input(1)
+    let turns: Vec<Turn> = read_lines(1)
         .iter()
         .map(|line| Turn::from_line(line))
         .collect();

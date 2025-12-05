@@ -1,27 +1,5 @@
-use std::{fs, str::FromStr};
-
-#[derive(Debug)]
-struct Range(u64, u64);
-
-impl Range {
-    fn sum_repeats<F>(&self, f: F) -> u64
-    where
-        F: Fn(u64) -> bool,
-    {
-        (self.0..=self.1).filter(|&x| f(x)).sum()
-    }
-}
-
-impl FromStr for Range {
-    type Err = &'static str;
-
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
-        let (l, r) = s.split_once('-').ok_or("No delimiter")?;
-        let start: u64 = l.trim().parse().map_err(|_| "Invalid start")?;
-        let end: u64 = r.trim().parse().map_err(|_| "Invalid end")?;
-        Ok(Self(start, end))
-    }
-}
+use aoc2025_rs::Range;
+use std::fs;
 
 fn is_double_repeat(n: u64) -> bool {
     let digits = n.ilog10() + 1;
