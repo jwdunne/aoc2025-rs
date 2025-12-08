@@ -1,4 +1,7 @@
-use std::collections::{HashMap, HashSet};
+use std::{
+    collections::{HashMap, HashSet},
+    time::Instant,
+};
 
 use aoc2025_rs::read_lines;
 
@@ -58,7 +61,16 @@ fn part2(grid: &[Vec<usize>]) -> usize {
 fn main() {
     let grid = parse(&read_lines(7));
     println!("Part 1: {}", part1(&grid));
-    println!("Part 2: {}", part2(&grid));
+
+    let now = Instant::now();
+    let p2 = part2(&grid);
+    let elapsed = now.elapsed();
+
+    println!(
+        "Part 2: {} ({}ms)",
+        p2,
+        (elapsed.as_micros() as f64) / 1000.0
+    );
 }
 
 #[cfg(test)]
