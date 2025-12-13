@@ -45,3 +45,19 @@ impl FromStr for Range {
         Ok(Self(start, end))
     }
 }
+
+#[macro_export]
+macro_rules! timed {
+    ($label:expr, $expr:expr) => {{
+        let now = std::time::Instant::now();
+        let result = $expr;
+        let elapsed = now.elapsed();
+        println!(
+            "{}: {} ({}ms)",
+            $label,
+            result,
+            elapsed.as_micros() as f64 / 1000.0
+        );
+        result
+    }};
+}
