@@ -1,6 +1,6 @@
-use std::{str::FromStr, time::Instant};
+use std::str::FromStr;
 
-use aoc2025_rs::read_lines;
+use aoc2025_rs::{read_lines, timed};
 use rayon::prelude::*;
 
 #[derive(Debug, PartialEq, Eq, Hash)]
@@ -111,17 +111,14 @@ fn part1(points: &[Point], max_shortest: usize) -> usize {
         root_sizes[root] += 1;
     }
 
-    root_sizes.sort_by(|a, b| b.cmp(a));
+    root_sizes.par_sort_unstable_by(|a, b| b.cmp(a));
 
     root_sizes.iter().take(3).product()
 }
 
 fn part2(points: &[Point]) -> u64 {
     let len = points.len();
-
-    let now = Instant::now();
     let distances = distances(points);
-    println!("{}ms", now.elapsed().as_micros() as f64 / 1000.0);
 
     let mut disjoint_set = DisjointSet::new(len);
     let mut last_union: Option<(usize, usize)> = None;
@@ -147,16 +144,8 @@ fn main() {
         .map(|line| line.parse::<Point>().expect("Could not parse point"))
         .collect::<Vec<_>>();
 
-    println!("Part 1: {}", part1(&points, 1000));
-
-    let now = Instant::now();
-    let part2 = part2(&points);
-    let elapsed = now.elapsed();
-    println!(
-        "Part 2: {} ({}ms)",
-        part2,
-        (elapsed.as_micros() as f64) / 1000.0
-    );
+    timed!("Part 1", part1(&points, 1000));
+    timed!("Part 2", part2(&points));
 }
 
 #[cfg(test)]
