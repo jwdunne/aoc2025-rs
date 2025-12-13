@@ -1,4 +1,4 @@
-use std::{i64, str::FromStr, u32};
+use std::str::FromStr;
 
 use aoc2025_rs::{read_lines, timed};
 use good_lp::{
@@ -247,7 +247,7 @@ impl IntSystem {
             .map(|i| vars.add(variable().integer().min(0).name(format!("x{}", i))))
             .collect();
 
-        let objective: Expression = x.iter().map(|&v| v).sum();
+        let objective: Expression = x.iter().copied().sum();
         let mut problem = vars.minimise(objective).using(default_solver);
 
         for (i, _) in augmented.iter().enumerate() {
